@@ -22,10 +22,12 @@ const getContactById = async (contactId) => {
 const removeContact = async (contactId) => {
   const contacts = await listContacts();
   const idx = contacts.findIndex((item) => item.id === contactId);
+
   if (idx === -1) {
     return null;
   }
-  const [remove] = contacts.splice(idx, 1);
+  const remove = contacts.splice(idx, 1);
+
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return remove;
 };
@@ -38,13 +40,13 @@ const addContact = async ({ name, email, phone }) => {
   return newContact;
 };
 
-const updateContactsById = async (id, data) => {
+const updateContactsById = async (contactId, data) => {
   const contacts = await listContacts();
-  const idx = contacts.findIndex((item) => item.id === id);
+  const idx = contacts.findIndex((item) => item.id === contactId);
   if (idx === -1) {
     return null;
   }
-  contacts[idx] = { id, ...data };
+  contacts[idx] = { ...contacts[idx], ...data };
   fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return contacts[idx];
 };

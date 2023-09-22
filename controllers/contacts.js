@@ -24,26 +24,28 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const result = contacts.addContact(req.body);
+  const result = await contacts.addContact(req.body);
   res.status(201).json({
     status: "success",
     code: 201,
-    data: { result },
+    data: result,
   });
 };
 
 const deleteById = async (req, res) => {
   const { contactId } = req.params;
-  const result = contacts.removeContact(contactId, req.body);
+  const result = await contacts.removeContact(contactId);
+
   if (!result) {
-    throw HttpError(404, "Not found");
+    HttpError(404, "Not found");
   }
   res.json({ message: "contact deleted" });
 };
 
 const updateById = async (req, res) => {
   const { contactId } = req.params;
-  const result = contacts.updateContactsById(contactId, req.body);
+
+  const result = await contacts.updateContactsById(contactId, req.body);
   if (!result) {
     throw HttpError(404, "Not found");
   }
